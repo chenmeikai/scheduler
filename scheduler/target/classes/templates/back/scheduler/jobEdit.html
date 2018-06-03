@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
+
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"></link>
+<link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet"></link>
+<!-- 文本编辑样式 -->
+<link th:href="@{/css/summernote/summernote.css}" rel="stylesheet" />
+<!-- 上传样式 -->
+<link th:href="@{/css/fileinput/bootstrap-fileinput.min.css}"
+	rel="stylesheet" />
+
+<style type="text/css">
+</style>
+
+<script th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+
+
+
+<title>任务编辑</title>
+</head>
+<body>
+	<!-- 编辑-->
+	<div class="container">
+		<div class="row">
+			<div class="row" id="spu-edit-place">
+				<div style="margin-left: 30px; margin-bottom: 20px;">
+					<span class="label label-danger">任务编辑</span>
+				</div>
+				<div class="col-md-12">
+					<div>
+						<ul class="nav nav-tabs" role="tablist">
+							<li role="presentation" class="active"><a href="#oneNode"
+								aria-controls="oneNode" role="tab" data-toggle="tab">基本信息</a></li>
+						</ul>
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="oneNode">
+								<form id="editbaseForm">
+									<input type="text" name="id" th:value="${job.id}" hidden=""
+										readonly="readonly" />
+									<input type="text" id="pause" name="pause" th:value="${job.pause}" hidden=""
+										readonly="readonly" />
+									<div class="form-group" style="margin-top: 30px;">
+										<label for="spu-name" class="control-label text-info"
+											style="margin-bottom: 5px;">类全名:</label> <input type="text"
+											class="form-control" id="className" name="className"
+											th:value="${job.className}" placeholder="请输入任务类全名" />
+									</div>
+									<div class="form-group" style="margin-top: 30px;">
+										<label for="spu-name" class="control-label text-info"
+											style="margin-bottom: 5px;">执行表达式:</label> <input type="text"
+											class="form-control" id="cronExpression" name="cronExpression"
+											th:value="${job.cronExpression}" placeholder="请输入执行表达式" />
+									</div>
+									<div class="form-group" style="margin-top: 30px;">
+										<label for="spu-name" class="control-label text-info"
+											style="margin-bottom: 5px;">任务名:</label> <input type="text"
+											class="form-control" id="jobName" name="jobName"
+											th:value="${job.jobName}" placeholder="请输入任务名" />
+									</div>
+									<div class="form-group" style="margin-top: 30px;">
+										<label for="spu-name" class="control-label text-info"
+											style="margin-bottom: 5px;">任务组:</label> <input type="text"
+											class="form-control" id="jobGroup" name="jobGroup"
+											th:value="${job.jobGroup}" placeholder="请输入任务组" />
+									</div>
+									<div class="form-group" style="margin-top: 30px;">
+										<label for="spu-name" class="control-label text-info"
+											style="margin-bottom: 5px;">触发器:</label> <input type="text"
+											class="form-control" id="triggerName" name="triggerName"
+											th:value="${job.triggerName}" placeholder="请输入触发器" />
+									</div>
+									<div class="form-group" style="margin-top: 30px;">
+										<label for="spu-name" class="control-label text-info"
+											style="margin-bottom: 5px;">触发组:</label> <input type="text"
+											class="form-control" id="triggerGroup" name="triggerGroup"
+											th:value="${job.triggerGroup}" placeholder="请输入触发组" />
+									</div>
+									<div class="form-group" style="margin-top: 30px;">
+										<label for="spu-name" class="control-label text-info"
+											style="margin-bottom: 5px;">任务描述:</label> <input type="text"
+											class="form-control" id="description" name="description"
+											th:value="${job.description}" placeholder="请介绍任务" />
+									</div>
+									<div class=" form-group form-inline " style="margin-top: 25px;">
+										<input id="updateBase" type="button" th:onclick="'editBase(this,'+${job.id}+')'"
+											class="form-control sure-button btn btn-info" value="确认修改" />
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+	
+
+		//更新基本信息
+		function editBase(target, id) {
+			var targetUrl = '/job/edit/'+id ;
+			var job = {
+					'id': id,
+					'className': $("#className").val(),
+					'cronExpression': $("#cronExpression").val(),
+					'jobName': $("#jobName").val(),
+					'jobGroup': $("#jobGroup").val(),
+					'triggerName': $("#triggerName").val(),
+					'triggerGroup': $("#triggerGroup").val(),
+					'pause': $("#pause").val(),
+					'description': $("#description").val()
+		    };
+			$(target).val("更新中").attr("disabled", "disabled");
+			$.ajax({
+				type : 'put',
+				url : targetUrl,
+				cache : false,
+				data : JSON.stringify(job),
+				processData : false,
+				contentType : 'application/json;charset=utf-8',
+				dataType : 'json',
+				success : function(data) {
+					if (data['code'] == 200) {
+						parent.layer.msg("更新成功")
+						$(target).val("确认修改").removeAttr("disabled");
+						return;
+					}
+					parent.layer.msg("更新失败")
+					$(target).val("确认修改").removeAttr("disabled");
+				},
+				error : function() {
+					parent.layer.msg("更新请求失败");
+					$(target).val("确认修改").removeAttr("disabled");
+				}
+			});
+		}
+		
+	</script>
+</body>
+</html>

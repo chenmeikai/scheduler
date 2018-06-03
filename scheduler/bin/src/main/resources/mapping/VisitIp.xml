@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huisheng.mapper.VisitIpMapper">
+
+  <!--BaseResultMap-->
+  <resultMap id="BaseResultMap" type="com.huisheng.model.VisitIp">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="ip" jdbcType="VARCHAR" property="ip" />
+        <result column="location" jdbcType="VARCHAR" property="location" />
+        <result column="date" jdbcType="VARCHAR" property="date" />
+  </resultMap>
+  
+  <!--columns-->
+  <sql id="sql_columns">
+      id, 
+      ip, 
+      location, 
+      date
+  </sql>
+  
+  <!--where-->
+  <sql id="sql_where">
+    <where>
+      <if test="null != id and '' != id">and id = #{id}</if>
+      <if test="null != ip and '' != ip">and ip = #{ip}</if>
+      <if test="null != location and '' != location">and location = #{location}</if>
+      <if test="null != date and '' != date">and date = #{date}</if>
+	</where>
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_visit_ip where id = #{id}
+  </select>
+  
+  <select id="selectOne" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_visit_ip <include refid="sql_where" />
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_visit_ip <include refid="sql_where" />
+  </select>
+  
+  <select id="selectByDate" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_visit_ip 
+    where date like concat(concat(#{date}),"%")
+  </select>
+  
+  <select id="count" resultType="int">
+    select count(*) from t_visit_ip <include refid="sql_where" />
+  </select>
+  
+  <select id="selectPage" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_visit_ip <include refid="sql_where" /> limit #{page.startRow},#{page.pageSize}
+  </select>
+  
+  <sql id="sql_save_columns">
+    insert into t_visit_ip
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+         <if test="null != ip">ip,</if>
+         <if test="null != location">location,</if>
+         <if test="null != date">date,</if>
+	</trim>
+  </sql>
+  
+  <sql id="sql_save_values">
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+     <if test="null != ip"> #{ip},</if>
+     <if test="null != location"> #{location},</if>
+     <if test="null != date"> #{date},</if>
+	</trim>
+  </sql>
+  
+  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    <include refid="sql_save_columns" /><include refid="sql_save_values" />
+  </insert>
+  
+  <insert id="batchSave">
+    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+	  <include refid="sql_save_columns" /><include refid="sql_save_values" />
+	</foreach>
+  </insert>
+  
+  <sql id="sql_update">
+    update t_visit_ip set id = #{id}
+     <if test="null != ip">, ip = #{ip}</if>
+     <if test="null != location">, location = #{location}</if>
+     <if test="null != date">, date = #{date}</if>
+	where id = #{id}
+  </sql>
+  
+  <update id="update">
+    <include refid="sql_update" />
+  </update>
+  
+  <update id="batchUpdate">
+    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+	  <include refid="sql_update" />
+	</foreach>
+  </update>
+  
+  <delete id="delById">
+    delete from t_visit_ip  where id = #{id}
+  </delete>
+  
+  <delete id="delArray">
+    delete from t_visit_ip where id in
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </delete>
+  
+  <delete id="delList">
+    delete from t_visit_ip where id in
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </delete>
+  
+</mapper>

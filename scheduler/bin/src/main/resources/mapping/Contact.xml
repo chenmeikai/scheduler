@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huisheng.mapper.ContactMapper">
+
+  <!-- cache -->
+  <cache type="com.huisheng.config.cache.MybatisRedisCache">
+        <property name="eviction" value="LRU" />
+        <property name="flushInterval" value="6000000" />
+        <property name="size" value="1024" />
+        <property name="readOnly" value="false" />
+  </cache>
+
+  <!--BaseResultMap-->
+  <resultMap id="BaseResultMap" type="com.huisheng.model.Contact">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="area" jdbcType="VARCHAR" property="area" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="ip" jdbcType="VARCHAR" property="ip" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  
+  <!--columns-->
+  <sql id="sql_columns">
+      id, 
+      contact_name, 
+      phone, 
+      content, 
+      area, 
+      create_time, 
+      ip, 
+      email,
+      state
+  </sql>
+  
+  <!--where-->
+  <sql id="sql_where">
+    <where>
+      <if test="null != id and '' != id">and id = #{id}</if>
+      <if test="null != contactName and '' != contactName">and contact_name = #{contactName}</if>
+      <if test="null != phone and '' != phone">and phone = #{phone}</if>
+      <if test="null != content and '' != content">and content = #{content}</if>
+      <if test="null != area and '' != area">and area = #{area}</if>
+      <if test="null != createTime and '' != createTime">and create_time = #{createTime}</if>
+      <if test="null != startTime and '' != startTime">and create_time <![CDATA[>=]]> #{startTime}</if>
+      <if test="null != endTime and '' != endTime">and create_time <![CDATA[<=]]> #{endTime}</if>
+      <if test="null != ip and '' != ip">and ip = #{ip}</if>
+      <if test="null != email and '' != email">and email = #{email}</if>
+      <if test="null != state and '' != state">and state = #{state}</if>
+	</where>
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_contact where id = #{id}
+  </select>
+  
+  <select id="selectOne" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_contact <include refid="sql_where" />
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_contact <include refid="sql_where" />
+    order by id desc
+  </select>
+  
+  <select id="selectPage" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_contact <include refid="sql_where" /> limit #{page.startRow},#{page.pageSize}
+  </select>
+  
+  <select id="count" resultType="int">
+    select count(*) from t_contact <include refid="sql_where" />
+  </select>
+  
+  <sql id="sql_save_columns">
+    insert into t_contact(
+      <if test="null != contactName">contact_name,</if>
+      <if test="null != phone">phone,</if>
+      <if test="null != content">content,</if>
+      <if test="null != area">area,</if>
+      <if test="null != createTime">create_time,</if>
+      <if test="null != ip">ip,</if>
+      <if test="null != email">email</if>
+	) values
+  </sql>
+  
+  <sql id="sql_save_values">
+    (
+     <if test="null != contactName"> #{contactName},</if>
+     <if test="null != phone"> #{phone},</if>
+     <if test="null != content"> #{content},</if>
+     <if test="null != area"> #{area},</if>
+     <if test="null != createTime"> #{createTime},</if>
+     <if test="null != ip"> #{ip},</if>
+     <if test="null != email"> #{email}</if>
+	)
+  </sql>
+  
+  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    <include refid="sql_save_columns" /><include refid="sql_save_values" />
+  </insert>
+  
+  <insert id="batchSave">
+    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+	  <include refid="sql_save_columns" /><include refid="sql_save_values" />
+	</foreach>
+  </insert>
+  
+  <sql id="sql_update">
+    update t_contact set id = #{id}
+     <if test="null != contactName">, contact_name = #{contactName}</if>
+     <if test="null != phone">, phone = #{phone}</if>
+     <if test="null != content">, content = #{content}</if>
+     <if test="null != area">, area = #{area}</if>
+     <if test="null != createTime">, create_time = #{createTime}</if>
+     <if test="null != ip">, ip = #{ip}</if>
+     <if test="null != email">, email = #{email}</if>
+     <if test="null != state">, state = #{state}</if>
+	where id = #{id}
+  </sql>
+  
+  <update id="update">
+    <include refid="sql_update" />
+  </update>
+  
+  <update id="batchUpdate">
+    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+	  <include refid="sql_update" />
+	</foreach>
+  </update>
+  
+  <delete id="delById">
+    delete from t_contact  where id = #{id}
+  </delete>
+  
+  <delete id="delArray">
+    delete from t_contact where id in
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </delete>
+  
+  <delete id="delList">
+    delete from t_contact where id in
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </delete>
+  
+</mapper>

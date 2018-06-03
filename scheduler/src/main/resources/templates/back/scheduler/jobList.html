@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<!--  <head>
+    Required meta tags
+    <meta charset="utf-8"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
+
+    Bootstrap CSS
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" type="text/css"></link>
+    <link th:href="@{/css/bootstrap-table.css}" rel="stylesheet" type="text/css"></link>
+    dateime
+    <link th:href="@{/css/bootstrap-datetimepicker.css}" rel="stylesheet" type="text/css"></link>
+    js
+    <script th:src="@{/js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.js}"></script>
+    <script th:src="@{/js/BootsSrapTable/bootstrap-table.min.js}"></script>
+    <script th:src="@{/js/BootsSrapTable/bootstrap-table-zh-CN.js}"></script>
+    <script th:src="@{/js/datetimepicker/bootstrap-datetimepicker.js}"></script>
+    <script th:src="@{/js/datetimepicker/bootstrap-datetimepicker.zh-CN.js}"></script>
+    
+    <title>bootstrap table</title>
+  </head> -->
+<div id="pageView"
+	style="background-color: white; padding-top: 20px; min-height: 800px;">
+	<div class="container-fluid" style="margin-top: 10px;">
+		<div class="row">
+			<div class="col-md-12">
+				<!--搜索栏-->
+			</div>
+		</div>
+
+		<!--table-->
+		<div class="row">
+			<div class="col-md-12">
+				<table id="showTable">
+
+				</table>
+			</div>
+		</div>
+
+	</div>
+	
+	<!-- 工具容器 -->
+	<div id="toolbar" class="btn-group">
+	    <button id="btn_edit" type="button" class="btn btn-info"
+			onclick="cron();">
+			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <span>表达式</span>
+		</button>
+		<button id="btn_run" type="button" class="btn btn-default"
+			onclick="run();">
+			<span class="glyphicon glyphicon-play" aria-hidden="true"></span> <span>启动</span>
+		</button>
+		<button id="btn_pause" type="button" class="btn btn-default"
+			onclick="pause();">
+			<span class="glyphicon glyphicon-pause" aria-hidden="true"></span> <span>暂停</span>
+		</button>
+		<button id="btn_restart" type="button" class="btn btn-default"
+			onclick="restart();">
+			<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> <span>重启</span>
+		</button>
+		<button id="btn_edit" type="button" class="btn btn-default"
+			onclick="edit();">
+			<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <span>修改</span>
+		</button>
+		<button id="btn_add" type="button" class="btn btn-default"
+			onclick="add();">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <span>新增</span>
+		</button>
+		<button id="btn_enable" type="button" class="btn btn-default"
+			onclick="enable();">
+			<span class="glyphicon glyphicon-import" aria-hidden="true"></span> <span>加入</span>
+		</button>
+		<button id="btn_unable" type="button" class="btn btn-default"
+			onclick="unable();">
+			<span class="glyphicon glyphicon-export" aria-hidden="true"></span> <span>移出</span>
+		</button>
+		<button id="btn_delete" type="button" class="btn btn-default"
+			onclick="del();">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> <span>删除</span>
+		</button>
+		
+	</div>
+
+	<script>
+        $(document).ready(function() {
+        	
+			 //初始化表
+			 InitMainTable ();
+			  
+        });
+        
+		
+	var $table;
+   //初始化bootstrap-table的内容(注意：如果是服务端分页，返回的结果必须包含total、rows两个参数。漏写或错写都会导致表格无法显示数据。)
+   function InitMainTable () {
+       //记录页面bootstrap-table全局变量$table，方便应用
+       var queryUrl = "/job/getData"
+       $table = $('#showTable').bootstrapTable({
+    	   locale:'zh-CN',                     //中文支持
+    	   url: queryUrl,                      //请求后台的URL（*）
+           method: 'GET',                      //请求方式（*）
+           contentType: "application/x-www-form-urlencoded",
+           toolbar: '#toolbar',                //工具按钮用哪个容器
+           striped: true,                      //是否显示行间隔色
+           cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+           pagination: false,                   //是否显示分页（*）
+           paginationShowPageGo: true,          //跳转页(扩展)
+           sortable: true,                     //是否启用排序
+           sortOrder: "desc",                   //排序方式
+           sortName :"id",
+           sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+           pageNumber:1,                       //初始化加载第一页，默认第一页
+           pageSize: 10,                       //每页的记录行数（*）
+           pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+           search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+           showColumns: false,                  //是否显示所有的列
+           minimumCountColumns: 2,             //最少允许的列数
+           clickToSelect: false,                //是否启用点击选中行
+           /* height: 500, */                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+           uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+           detailView: false,                   //是否显示父子表
+           showColumns: true,                   //是否可选择展示的列
+           showRefresh: true,                   //刷新
+           columns: [{
+               checkbox: true,  
+               visible: true                 //是否显示复选框  
+           }, 
+           {
+               field: 'className',
+               title: '类全名',
+               align: 'center',
+               sortable: false
+           },{
+               field: 'cronExpression',
+               title: '表达式',
+               align: 'center',
+               sortable: false
+           },
+           {
+               field: 'jobName',
+               title: '任务名',
+               align: 'center',
+               sortable: false
+           },
+           {
+               field: 'jobGroup',
+               title: '任务组',
+               align: 'center',
+               sortable: false
+           },
+           {
+               field: 'triggerName',
+               title: '触发器',
+               align: 'center',
+               sortable: false
+           },
+           {
+               field: 'triggerGroup',
+               title: '触发组',
+               align: 'center',
+               sortable: false
+           },
+           {
+               field: 'pause',
+               title: '是否暂停',
+               align: 'center',
+               sortable: false
+           },
+           {
+               field: 'enable',
+               title: '激活状态',
+               align: 'center',
+               sortable: false
+           },
+           {
+               field: 'description',
+               title: '任务描述',
+               align: 'center',
+               sortable: false
+           },
+           {
+               field: 'createTime',
+               title: '创建时间',
+               align: 'center',
+               sortable: false,
+               formatter: function (value, row, index) {
+                   return getMyDate(value)
+               }
+           },
+           {
+               field: 'lastUpdateTime',
+               title: '更新时间',
+               align: 'center',
+               sortable: false,
+               formatter: function (value, row, index) {
+                   return getMyDate(value)
+               }
+           },
+            ],
+           //得到查询的参数
+           queryParams : queryParams,
+           onLoadSuccess: function () {//加载成功执行的方法
+           },
+           onLoadError: function () {
+        	   layer.msg('数据加载失败');
+           },
+           onDblClickRow: function (row, $element) {//双击行执行事件
+        	  
+           },
+       });
+       
+       //请求服务数据时所传参数
+       function queryParams(params){
+    	   
+           var temp = {   
+           };
+           return temp;
+       }
+   };
+   
+   
+   function editRecord(id){
+	   //prompt层
+	   layer.prompt({title: '请输入值', formType: 0}, function(paramsValue, index){
+		   var targetUrl = '/manager/system/editParamsBase'
+		   var data = new FormData();
+		   data.append("id", id);
+		   data.append("paramsValue", paramsValue);
+		   $.ajax({
+				type : 'post',
+				url : targetUrl,
+				cache : false,
+				data : data,
+				processData : false,
+				contentType : false,
+				dataType : 'json',
+				success : function(data) {
+					parent.layer.msg(data.desc);
+					//重新加载
+					 $("#showTable").bootstrapTable('destroy'); 
+					 InitMainTable ();
+				},
+				error : function() {
+					parent.layer.msg("请求失败");
+				}
+			}); 
+	     layer.close(index);
+	   });
+   }
+   
+ //日期转换
+   function getMyDate(str){ 
+	   if(str==null) return "";
+       var oDate =new Date(str);  
+       var oYear =oDate.getFullYear();  
+       var oMonth =oDate.getMonth()+1; 
+       var oDay =oDate.getDate(); 
+       var oHour =oDate.getHours();  
+       var oMin =oDate.getMinutes();  
+       var oSen =oDate.getSeconds();  
+       var oTime =oYear +'-'+ turn(oMonth) +'-'+ turn(oDay) +' '+ turn(oHour) +':'+ turn(oMin) +':'+turn(oSen);//最后拼接时间  
+       return oTime;  
+   }; 
+   function turn(num){
+	   if((10-parseInt(num))>0){  
+    	  num ='0'+num;  
+       }
+	   return num ;
+   }
+   
+   //新增
+   function add(){
+	   //询问框
+		parent.layer.confirm('只有开发人员才可进行该操作，是否继续？', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			//查看弹出层
+			 layer.open({
+			   type: 2,
+			   title: '新增任务',
+			   shadeClose: true,
+			   shade: 0.5,
+			   area: ['60%', '80%'],
+			   content: '/job/save/'
+			 });
+			layer.msg("请谨慎操作")
+		}, function() {
+			return;
+		});
+   }
+   
+   //移出任务
+   function unable(){
+	  //获得选中行
+	   var data =  $('#showTable').bootstrapTable('getSelections');
+	   //获得记录数
+	   var num =data.length
+	   if(num==0){
+		   layer.msg('抱歉，请选择要移出的任务');
+		   return;
+	   }
+	   if(num>1){
+		   layer.msg('抱歉，只能同时移出一个任务');
+		   return;
+	   }
+	   //获取id
+	   var id=data[0]['id']
+	   
+	   //询问框
+		parent.layer.confirm('是否确定移出任务？', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			var targetUrl = '/job/unable/'+id
+			$.ajax({
+				type : 'delete',
+				url : targetUrl,
+				cache : false,
+				processData : false,
+				contentType : false,
+				dataType : 'json',
+				success : function(result) {
+					if (result['code'] == 200) {
+						 //重新加载
+						 $("#showTable").bootstrapTable('destroy'); 
+						 InitMainTable ();
+					}
+					parent.layer.msg("移出成功")
+				},
+				error : function() {
+					parent.layer.msg("移出请求失败");
+				}
+			});
+		}, function() {
+			return;
+		});
+   }
+   
+   
+   //移出任务
+   function del(){
+	  //获得选中行
+	   var data =  $('#showTable').bootstrapTable('getSelections');
+	   //获得记录数
+	   var num =data.length
+	   if(num==0){
+		   layer.msg('抱歉，请选择要删除的任务');
+		   return;
+	   }
+	   if(num>1){
+		   layer.msg('抱歉，只能同时删除一个任务');
+		   return;
+	   }
+	   //获取id
+	   var id=data[0]['id']
+	   
+	   //询问框
+		parent.layer.confirm('请谨慎处理，是否确定删除任务？', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			var targetUrl = '/job/delete/'+id
+			$.ajax({
+				type : 'delete',
+				url : targetUrl,
+				cache : false,
+				processData : false,
+				contentType : false,
+				dataType : 'json',
+				success : function(result) {
+					if (result['code'] == 200) {
+						 //重新加载
+						 $("#showTable").bootstrapTable('destroy'); 
+						 InitMainTable ();
+						 parent.layer.msg("删除任务成功")
+					}
+					parent.layer.msg("删除任务失败，请确认任务是否已经移出")
+				},
+				error : function() {
+					parent.layer.msg("删除请求失败");
+				}
+			});
+		}, function() {
+			return;
+		});
+   }
+   
+   //加入任务
+   function enable(){
+	  //获得选中行
+	   var data =  $('#showTable').bootstrapTable('getSelections');
+	   //获得记录数
+	   var num =data.length
+	   if(num==0){
+		   layer.msg('抱歉，请选择要加入的任务');
+		   return;
+	   }
+	   if(num>1){
+		   layer.msg('抱歉，只能同时加入一个任务');
+		   return;
+	   }
+	   //获取id
+	   var id=data[0]['id']
+	   
+	   //询问框
+		parent.layer.confirm('是否确定加入任务？', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			var targetUrl = '/job/enable/'+id
+			$.ajax({
+				type : 'put',
+				url : targetUrl,
+				cache : false,
+				processData : false,
+				contentType : false,
+				dataType : 'json',
+				success : function(result) {
+					if (result['code'] == 200) {
+						 //重新加载
+						 $("#showTable").bootstrapTable('destroy'); 
+						 InitMainTable ();
+					}
+					parent.layer.msg("加入成功")
+				},
+				error : function() {
+					parent.layer.msg("加入请求失败");
+				}
+			});
+		}, function() {
+			return;
+		});
+   }
+   
+   function pause(){
+	  //获得选中行
+	   var data =  $('#showTable').bootstrapTable('getSelections');
+	   //获得记录数
+	   var num =data.length
+	   if(num==0){
+		   layer.msg('抱歉，请选择要暂停的任务');
+		   return;
+	   }
+	   if(num>1){
+		   layer.msg('抱歉，只能同时暂停一个任务');
+		   return;
+	   }
+	   //获取id
+	   var id=data[0]['id']
+	   var enable=data[0]['enable']
+	   
+	   if (enable != true ){
+		   layer.msg('抱歉，该任务还未被激活，暂停失败')
+		   return;
+	   }
+	   //询问框
+		parent.layer.confirm('是否确定暂停任务？', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			var targetUrl = '/job/pause/'+id
+			$.ajax({
+				type : 'put',
+				url : targetUrl,
+				cache : false,
+				processData : false,
+				contentType : false,
+				dataType : 'json',
+				success : function(result) {
+					if (result['code'] == 200) {
+						 //重新加载
+						 $("#showTable").bootstrapTable('destroy'); 
+						 InitMainTable ();
+					}
+					parent.layer.msg("暂停成功")
+				},
+				error : function() {
+					parent.layer.msg("暂停失败");
+				}
+			});
+		}, function() {
+			return;
+		});
+   }
+   
+   //启动
+   function run(){
+	  //获得选中行
+	   var data =  $('#showTable').bootstrapTable('getSelections');
+	   //获得记录数
+	   var num =data.length
+	   if(num==0){
+		   layer.msg('抱歉，请选择要启动的任务');
+		   return;
+	   }
+	   if(num>1){
+		   layer.msg('抱歉，只能同时启动一个任务');
+		   return;
+	   }
+	   //获取id
+	   var id=data[0]['id']
+	   var enable=data[0]['enable']
+	   
+	   if (enable != true ){
+		   layer.msg('抱歉，该任务还未被激活，启动失败')
+		   return;
+	   }
+	   //询问框
+		parent.layer.confirm('是否确定启动任务？', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			var targetUrl = '/job/run/'+id
+			$.ajax({
+				type : 'put',
+				url : targetUrl,
+				cache : false,
+				processData : false,
+				contentType : false,
+				dataType : 'json',
+				success : function(result) {
+					if (result['code'] == 200) {
+						 //重新加载
+						 $("#showTable").bootstrapTable('destroy'); 
+						 InitMainTable ();
+					}
+					parent.layer.msg("启动成功")
+				},
+				error : function() {
+					parent.layer.msg("启动失败");
+				}
+			});
+		}, function() {
+			return;
+		});
+   }
+   
+   //重启
+   function restart(){
+	  //获得选中行
+	   var data =  $('#showTable').bootstrapTable('getSelections');
+	   //获得记录数
+	   var num =data.length
+	   if(num==0){
+		   layer.msg('抱歉，请选择要重启的任务');
+		   return;
+	   }
+	   if(num>1){
+		   layer.msg('抱歉，只能同时重启一个任务');
+		   return;
+	   }
+	   //获取id
+	   var id=data[0]['id']
+	   var enable=data[0]['enable']
+	   
+	   if (enable != true ){
+		   layer.msg('抱歉，该任务还未被激活，重启失败')
+		   return;
+	   }
+	   //询问框
+		parent.layer.confirm('是否确定重启任务？', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			var targetUrl = '/job/resume/'+id
+			$.ajax({
+				type : 'put',
+				url : targetUrl,
+				cache : false,
+				processData : false,
+				contentType : false,
+				dataType : 'json',
+				success : function(result) {
+					if (result['code'] == 200) {
+						 //重新加载
+						 $("#showTable").bootstrapTable('destroy'); 
+						 InitMainTable ();
+					}
+					parent.layer.msg("重启成功")
+				},
+				error : function() {
+					parent.layer.msg("重启失败");
+				}
+			});
+		}, function() {
+			return;
+		});
+   }
+   
+   
+   //编辑
+   function edit(){
+	   //获得选中行
+	   var data =  $('#showTable').bootstrapTable('getSelections');
+	   //获得记录数
+	   var num =data.length
+	   if(num==0){
+		   layer.msg('抱歉，请选择要修改的任务');
+		   return;
+	   }
+	   if(num>1){
+		   layer.msg('抱歉，只能同时修改一个任务');
+		   return;
+	   }
+	   //获取id
+	   var id=data[0]['id']
+	   
+       var enable=data[0]['enable']
+	   
+	   if (enable != true ){
+		   layer.msg('抱歉，该任务还未被激活，不可被编辑')
+		   return;
+	   }
+	   
+	    //查看弹出层
+		 layer.open({
+		   type: 2,
+		   title: '请确保任务已经被激活（已加入）',
+		   shadeClose: true,
+		   shade: 0.5,
+		   area: ['60%', '80%'],
+		   content: '/job/edit/'+id
+		 });
+   }
+   
+   //cron表达式
+   function cron(){
+	  window.open("/job/cron")
+   }
+		
+    </script>
+</div>
+</html>

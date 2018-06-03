@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huisheng.mapper.AdMapper">
+
+  <!-- cache -->
+  <cache type="com.huisheng.config.cache.MybatisRedisCache">
+        <property name="eviction" value="LRU" />
+        <property name="flushInterval" value="6000000" />
+        <property name="size" value="1024" />
+        <property name="readOnly" value="false" />
+  </cache>
+
+  <!--BaseResultMap-->
+  <resultMap id="BaseResultMap" type="com.huisheng.model.Ad">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="ad_no" jdbcType="BIGINT" property="adNo" />
+        <result column="picture" jdbcType="VARCHAR" property="picture" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="memo" jdbcType="VARCHAR" property="memo" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+  
+  <!--columns-->
+  <sql id="sql_columns">
+      id, 
+      ad_no, 
+      picture, 
+      title, 
+      memo, 
+      content, 
+      type, 
+      url, 
+      create_time, 
+      update_time, 
+      sort
+  </sql>
+  
+  <!--where-->
+  <sql id="sql_where">
+    <where>
+      <if test="null != id and '' != id">and id = #{id}</if>
+      <if test="null != adNo and '' != adNo">and ad_no = #{adNo}</if>
+      <if test="null != picture and '' != picture">and picture = #{picture}</if>
+      <if test="null != title and '' != title">and title = #{title}</if>
+      <if test="null != memo and '' != memo">and memo = #{memo}</if>
+      <if test="null != content and '' != content">and content = #{content}</if>
+      <if test="null != type and '' != type">and type = #{type}</if>
+      <if test="null != url and '' != url">and url = #{url}</if>
+      <if test="null != createTime and '' != createTime">and create_time = #{createTime}</if>
+      <if test="null != updateTime and '' != updateTime">and update_time = #{updateTime}</if>
+      <if test="null != sort and '' != sort">and sort = #{sort}</if>
+	</where>
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_ad where id = #{id}
+  </select>
+  
+  <select id="selectOne" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_ad <include refid="sql_where" />
+  </select>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_ad <include refid="sql_where" />
+    <if  test="null != sortName and '' != sortName">
+      order by ${sortName} 
+       <if  test="null != sortOrder and '' != sortOrder">
+       ${sortOrder} 
+      </if>
+    </if>
+  </select>
+  
+  <select id="selectOrderBySort" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_ad 
+    order by sort
+  </select>
+  
+  <select id="selectPage" resultMap="BaseResultMap">
+    select <include refid="sql_columns" /> from t_ad <include refid="sql_where" /> limit #{page.startRow},#{page.pageSize}
+  </select>
+  
+  <sql id="sql_save_columns">
+    insert into t_ad
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+         <if test="null != adNo">ad_no,</if>
+         <if test="null != picture">picture,</if>
+         <if test="null != title">title,</if>
+         <if test="null != memo">memo,</if>
+         <if test="null != content">content,</if>
+         <if test="null != type">type,</if>
+         <if test="null != url">url,</if>
+         <if test="null != createTime">create_time,</if>
+         <if test="null != updateTime">update_time,</if>
+         <if test="null != sort">sort,</if>
+	</trim>
+  </sql>
+  
+  <sql id="sql_save_values">
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+     <if test="null != adNo"> #{adNo},</if>
+     <if test="null != picture"> #{picture},</if>
+     <if test="null != title"> #{title},</if>
+     <if test="null != memo"> #{memo},</if>
+     <if test="null != content"> #{content},</if>
+     <if test="null != type"> #{type},</if>
+     <if test="null != url"> #{url},</if>
+     <if test="null != createTime"> #{createTime},</if>
+     <if test="null != updateTime"> #{updateTime},</if>
+     <if test="null != sort"> #{sort},</if>
+	</trim>
+  </sql>
+  
+  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    <include refid="sql_save_columns" /><include refid="sql_save_values" />
+  </insert>
+  
+  <insert id="batchSave">
+    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+	  <include refid="sql_save_columns" /><include refid="sql_save_values" />
+	</foreach>
+  </insert>
+  
+  <sql id="sql_update">
+    update t_ad set id = #{id}
+     <if test="null != adNo">, ad_no = #{adNo}</if>
+     <if test="null != picture">, picture = #{picture}</if>
+     <if test="null != title">, title = #{title}</if>
+     <if test="null != memo">, memo = #{memo}</if>
+     <if test="null != content">, content = #{content}</if>
+     <if test="null != type">, type = #{type}</if>
+     <if test="null != url">, url = #{url}</if>
+     <if test="null != createTime">, create_time = #{createTime}</if>
+     <if test="null != updateTime">, update_time = #{updateTime}</if>
+     <if test="null != sort">, sort = #{sort}</if>
+	where id = #{id}
+  </sql>
+  
+  <update id="update">
+    <include refid="sql_update" />
+  </update>
+  
+  <update id="batchUpdate">
+    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+	  <include refid="sql_update" />
+	</foreach>
+  </update>
+  
+  <delete id="delArray">
+    delete from t_ad where id in
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </delete>
+  
+  <delete id="delList">
+    delete from t_ad where id in
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </delete>
+  
+</mapper>
