@@ -10,7 +10,8 @@
     <resultMap id="baseResultMap" type="com.kenhome.model.ScheduleJob">
         <id column="id" property="id" javaType="java.lang.Long" jdbcType="INTEGER"></id>
         <result column="class_name" property="className" javaType="java.lang.String" jdbcType="VARCHAR"></result>
-        <result column="cron_expression" property="cronExpression" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result column="cron_expression" property="cronExpression" javaType="java.lang.String"
+                jdbcType="VARCHAR"></result>
         <result column="job_name" property="jobName" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result column="job_group" property="jobGroup" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result column="trigger_name" property="triggerName" javaType="java.lang.String" jdbcType="VARCHAR"></result>
@@ -19,19 +20,20 @@
         <result column="enable" property="enable" javaType="java.lang.Boolean" jdbcType="BOOLEAN"></result>
         <result column="description" property="description" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result column="create_time" property="createTime" javaType="java.util.Date" jdbcType="TIMESTAMP"></result>
-        <result column="last_update_time" property="lastUpdateTime" javaType="java.util.Date" jdbcType="TIMESTAMP"></result>
+        <result column="last_update_time" property="lastUpdateTime" javaType="java.util.Date"
+                jdbcType="TIMESTAMP"></result>
     </resultMap>
 
     <select id="select" resultMap="baseResultMap">
         SELECT
-          <include refid="baseColumnSql"/>
+        <include refid="baseColumnSql"/>
         FROM schedule_job
         WHERE id = #{id}
     </select>
 
     <select id="getAllJob" resultMap="baseResultMap">
         SELECT
-          <include refid="baseColumnSql"/>
+        <include refid="baseColumnSql"/>
         FROM schedule_job
     </select>
 
@@ -82,8 +84,8 @@
         SET enable = FALSE
         WHERE id = #{id}
     </delete>
-    
-    
+
+
     <delete id="delete" parameterType="java.lang.Long">
         DELETE from schedule_job
         WHERE id = #{id}

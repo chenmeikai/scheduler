@@ -2,17 +2,17 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
 
-
 body {
-  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: #2f4050;
-  font-size: 13px;
-  color: #676a6c;
-  overflow-x: hidden;
+    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #2f4050;
+    font-size: 13px;
+    color: #676a6c;
+    overflow-x: hidden;
 }
+
 html,
 body {
-  height: 100%;
+    height: 100%;
 }
 
 h1,
@@ -21,53 +21,58 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 100;
+    font-weight: 100;
 }
+
 h1 {
-  font-size: 30px;
+    font-size: 30px;
 }
+
 h2 {
-  font-size: 24px;
+    font-size: 24px;
 }
+
 h3 {
-  font-size: 16px;
+    font-size: 16px;
 }
+
 h4 {
-  font-size: 14px;
+    font-size: 14px;
 }
+
 h5 {
-  font-size: 12px;
+    font-size: 12px;
 }
+
 h6 {
-  font-size: 10px;
+    font-size: 10px;
 }
+
 h3,
 h4,
 h5 {
-  margin-top: 5px;
-  font-weight: 600;
+    margin-top: 5px;
+    font-weight: 600;
 }
 
 .gray-bg {
-  background-color: #f3f3f4;
+    background-color: #f3f3f4;
 }
 
 .middle-box {
-  max-width: 400px;
-  z-index: 100;
-  margin: 0 auto;
-  padding-top: 40px;
+    max-width: 400px;
+    z-index: 100;
+    margin: 0 auto;
+    padding-top: 40px;
 }
 
 .middle-box h1 {
-  font-size: 170px;
+    font-size: 170px;
 }
 
 .m-t {
-  margin-top: 15px;
+    margin-top: 15px;
 }
-
-
 
 .animated {
     -webkit-animation-duration: 1s;

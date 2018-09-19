@@ -2,112 +2,129 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.huisheng.mapper.NewsCategoryMapper">
 
-  <!-- cache -->
-  <cache type="com.huisheng.config.cache.MybatisRedisCache">
-        <property name="eviction" value="LRU" />
-        <property name="flushInterval" value="6000000" />
-        <property name="size" value="1024" />
-        <property name="readOnly" value="false" />
-  </cache>
+    <!-- cache -->
+    <cache type="com.huisheng.config.cache.MybatisRedisCache">
+        <property name="eviction" value="LRU"/>
+        <property name="flushInterval" value="6000000"/>
+        <property name="size" value="1024"/>
+        <property name="readOnly" value="false"/>
+    </cache>
 
-  <!--BaseResultMap-->
-  <resultMap id="BaseResultMap" type="com.huisheng.model.NewsCategory">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="news_category_no" jdbcType="BIGINT" property="newsCategoryNo" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-  </resultMap>
-  
-  <!--columns-->
-  <sql id="sql_columns">
-      id, 
-      news_category_no, 
-      name, 
-      create_time
-  </sql>
-  
-  <!--where-->
-  <sql id="sql_where">
-    <where>
-      <if test="null != id and '' != id">and id = #{id}</if>
-      <if test="null != newsCategoryNo and '' != newsCategoryNo">and news_category_no = #{newsCategoryNo}</if>
-      <if test="null != name and '' != name">and name = #{name}</if>
-      <if test="null != createTime and '' != createTime">and create_time = #{createTime}</if>
-	</where>
-  </sql>
-  
-  <select id="selectById" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_news_category where id = #{id}
-  </select>
-  
-  <select id="selectOne" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_news_category <include refid="sql_where" />
-  </select>
-  
-  <select id="selectList" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_news_category <include refid="sql_where" />
-  </select>
-  
-  <select id="selectPage" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_news_category <include refid="sql_where" /> limit #{page.startRow},#{page.pageSize}
-  </select>
-  
-  <sql id="sql_save_columns">
-    insert into t_news_category(
-         <if test="null != newsCategoryNo">news_category_no</if>,
-         <if test="null != name">name</if>,
-         <if test="null != createTime">create_time</if>
-	) values
-  </sql>
-  
-  <sql id="sql_save_values">
-    (
-     <if test="null != newsCategoryNo"> #{newsCategoryNo}</if> , 
-     <if test="null != name"> #{name}</if> , 
-     <if test="null != createTime"> #{createTime}</if>
-	)
-  </sql>
-  
-  <insert id="save" keyProperty="id" useGeneratedKeys="true">
-    <include refid="sql_save_columns" /><include refid="sql_save_values" />
-  </insert>
-  
-  <insert id="batchSave">
-    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
-	  <include refid="sql_save_columns" /><include refid="sql_save_values" />
-	</foreach>
-  </insert>
-  
-  <sql id="sql_update">
-    update t_news_category set id = #{id}
-     <if test="null != newsCategoryNo">, news_category_no = #{newsCategoryNo}</if>
-     <if test="null != name">, name = #{name}</if>
-     <if test="null != createTime">, create_time = #{createTime}</if>
-	where id = #{id}
-  </sql>
-  
-  <update id="update">
-    <include refid="sql_update" />
-  </update>
-  
-  <update id="batchUpdate">
-    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
-	  <include refid="sql_update" />
-	</foreach>
-  </update>
-  
-  <delete id="delArray">
-    delete from t_news_category where id in
-	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
-  </delete>
-  
-  <delete id="delList">
-    delete from t_news_category where id in
-	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
-  </delete>
-  
-  <select id="count" resultMap="BaseResultMap">
-    select count(*) from t_news_category <include refid="sql_where" />
-  </select>
-  
+    <!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.huisheng.model.NewsCategory">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="news_category_no" jdbcType="BIGINT" property="newsCategoryNo"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!--columns-->
+    <sql id="sql_columns">
+        id,
+        news_category_no,
+        name,
+        create_time
+    </sql>
+
+    <!--where-->
+    <sql id="sql_where">
+        <where>
+            <if test="null != id and '' != id">and id = #{id}</if>
+            <if test="null != newsCategoryNo and '' != newsCategoryNo">and news_category_no = #{newsCategoryNo}</if>
+            <if test="null != name and '' != name">and name = #{name}</if>
+            <if test="null != createTime and '' != createTime">and create_time = #{createTime}</if>
+        </where>
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_news_category where id = #{id}
+    </select>
+
+    <select id="selectOne" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_news_category
+        <include refid="sql_where"/>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_news_category
+        <include refid="sql_where"/>
+    </select>
+
+    <select id="selectPage" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_news_category
+        <include refid="sql_where"/>
+        limit #{page.startRow},#{page.pageSize}
+    </select>
+
+    <sql id="sql_save_columns">
+        insert into t_news_category(
+        <if test="null != newsCategoryNo">news_category_no</if>,
+        <if test="null != name">name</if>,
+        <if test="null != createTime">create_time</if>
+        ) values
+    </sql>
+
+    <sql id="sql_save_values">
+        (
+        <if test="null != newsCategoryNo">#{newsCategoryNo}</if>
+        ,
+        <if test="null != name">#{name}</if>
+        ,
+        <if test="null != createTime">#{createTime}</if>
+        )
+    </sql>
+
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        <include refid="sql_save_columns"/>
+        <include refid="sql_save_values"/>
+    </insert>
+
+    <insert id="batchSave">
+        <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+            <include refid="sql_save_columns"/>
+            <include refid="sql_save_values"/>
+        </foreach>
+    </insert>
+
+    <sql id="sql_update">
+        update t_news_category set id = #{id}
+        <if test="null != newsCategoryNo">, news_category_no = #{newsCategoryNo}</if>
+        <if test="null != name">, name = #{name}</if>
+        <if test="null != createTime">, create_time = #{createTime}</if>
+        where id = #{id}
+    </sql>
+
+    <update id="update">
+        <include refid="sql_update"/>
+    </update>
+
+    <update id="batchUpdate">
+        <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+            <include refid="sql_update"/>
+        </foreach>
+    </update>
+
+    <delete id="delArray">
+        delete from t_news_category where id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+
+    <delete id="delList">
+        delete from t_news_category where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+
+    <select id="count" resultMap="BaseResultMap">
+        select count(*) from t_news_category
+        <include refid="sql_where"/>
+    </select>
+
 </mapper>

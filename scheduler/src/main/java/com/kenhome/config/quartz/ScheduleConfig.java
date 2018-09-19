@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+
 import javax.sql.DataSource;
 
 /**
- * 
- * @Description:配置SchedulerFactory  
- * @author: cmk 
- * @date:   2018年6月1日 下午11:23:08
+ * @Description:配置SchedulerFactory
+ * @author: cmk
+ * @date: 2018年6月1日 下午11:23:08
  */
 @Configuration
 public class ScheduleConfig {

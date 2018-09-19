@@ -3,9 +3,9 @@
 ------------------------------------------------------------------*/
 
 .contact-list {
-	> li {
-		@include font($size: 13px);
-		color: $color-link;
-		margin-bottom: 10px;
-	}
+  > li {
+    @include font($size: 13px);
+    color: $color-link;
+    margin-bottom: 10px;
+  }
 }

@@ -2,149 +2,163 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.huisheng.mapper.UserMapper">
 
-  <!-- cache -->
-  <cache type="com.huisheng.config.cache.MybatisRedisCache">
-        <property name="eviction" value="LRU" />
-        <property name="flushInterval" value="6000000" />
-        <property name="size" value="1024" />
-        <property name="readOnly" value="false" />
-  </cache>
+    <!-- cache -->
+    <cache type="com.huisheng.config.cache.MybatisRedisCache">
+        <property name="eviction" value="LRU"/>
+        <property name="flushInterval" value="6000000"/>
+        <property name="size" value="1024"/>
+        <property name="readOnly" value="false"/>
+    </cache>
 
-  <!--BaseResultMap-->
-  <resultMap id="BaseResultMap" type="com.huisheng.model.User">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="user_no" jdbcType="BIGINT" property="userNo" />
-        <result column="user_name" jdbcType="VARCHAR" property="userName" />
-        <result column="password" jdbcType="VARCHAR" property="password" />
-        <result column="avatar" jdbcType="VARCHAR" property="avatar" />
-        <result column="role" jdbcType="INTEGER" property="role" />
-        <result column="phone" jdbcType="VARCHAR" property="phone" />
-        <result column="state" jdbcType="INTEGER" property="state" />
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  
-  <!--columns-->
-  <sql id="sql_columns">
-      id, 
-      user_no, 
-      user_name, 
-      password, 
-      avatar, 
-      role, 
-      phone, 
-      state, 
-      create_time, 
-      update_time
-  </sql>
-  
-  <!--where-->
-  <sql id="sql_where">
-    <where>
-      <if test="null != id and '' != id">and id = #{id}</if>
-      <if test="null != userNo and '' != userNo">and user_no = #{userNo}</if>
-      <if test="null != userName and '' != userName">and user_name = #{userName}</if>
-      <if test="null != password and '' != password">and password = #{password}</if>
-      <if test="null != avatar and '' != avatar">and avatar = #{avatar}</if>
-      <if test="null != role and '' != role">and role = #{role}</if>
-      <if test="null != phone and '' != phone">and phone = #{phone}</if>
-      <if test="null != state and '' != state">and state = #{state}</if>
-      <if test="null != createTime and '' != createTime">and create_time = #{createTime}</if>
-      <if test="null != updateTime and '' != updateTime">and update_time = #{updateTime}</if>
-	</where>
-  </sql>
-  
-  <select id="selectById" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_user where id = #{id}
-  </select>
-  
-  <select id="selectOne" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_user <include refid="sql_where" />
-  </select>
-  
-  <select id="selectList" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_user <include refid="sql_where" />
-  </select>
-  
-  <select id="selectPage" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_user <include refid="sql_where" /> limit #{page.startRow},#{page.pageSize}
-  </select>
-  
-  <sql id="sql_save_columns">
-    insert into t_user
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-         <if test="null != userNo">user_no,</if>
-         <if test="null != userName">user_name,</if>
-         <if test="null != password">password,</if>
-         <if test="null != avatar">avatar,</if>
-         <if test="null != role">role,</if>
-         <if test="null != phone">phone,</if>
-         <if test="null != state">state,</if>
-         <if test="null != createTime">create_time,</if>
-         <if test="null != updateTime">update_time,</if>
-	</trim>
-  </sql>
-  
-  <sql id="sql_save_values">
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-     <if test="null != userNo"> #{userNo},</if>
-     <if test="null != userName"> #{userName},</if>
-     <if test="null != password"> #{password},</if>
-     <if test="null != avatar"> #{avatar},</if>
-     <if test="null != role"> #{role},</if>
-     <if test="null != phone"> #{phone},</if>
-     <if test="null != state"> #{state},</if>
-     <if test="null != createTime"> #{createTime},</if>
-     <if test="null != updateTime"> #{updateTime},</if>
-	</trim>
-  </sql>
-  
-  <insert id="save" keyProperty="id" useGeneratedKeys="true">
-    <include refid="sql_save_columns" /><include refid="sql_save_values" />
-  </insert>
-  
-  <insert id="batchSave">
-    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
-	  <include refid="sql_save_columns" /><include refid="sql_save_values" />
-	</foreach>
-  </insert>
-  
-  <sql id="sql_update">
-    update t_user set id = #{id}
-     <if test="null != userNo">, user_no = #{userNo}</if>
-     <if test="null != userName">, user_name = #{userName}</if>
-     <if test="null != password">, password = #{password}</if>
-     <if test="null != avatar">, avatar = #{avatar}</if>
-     <if test="null != role">, role = #{role}</if>
-     <if test="null != phone">, phone = #{phone}</if>
-     <if test="null != state">, state = #{state}</if>
-     <if test="null != createTime">, create_time = #{createTime}</if>
-     <if test="null != updateTime">, update_time = #{updateTime}</if>
-	where id = #{id}
-  </sql>
-  
-  <update id="update">
-    <include refid="sql_update" />
-  </update>
-  
-  <update id="batchUpdate">
-    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
-	  <include refid="sql_update" />
-	</foreach>
-  </update>
-  
-   <delete id="delById">
-    delete from t_user  where id = #{id}
-  </delete>
-  
-  <delete id="delArray">
-    delete from t_user where id in
-	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
-  </delete>
-  
-  <delete id="delList">
-    delete from t_user where id in
-	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
-  </delete>
-  
+    <!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.huisheng.model.User">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_no" jdbcType="BIGINT" property="userNo"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
+        <result column="role" jdbcType="INTEGER" property="role"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!--columns-->
+    <sql id="sql_columns">
+        id,
+        user_no,
+        user_name,
+        password,
+        avatar,
+        role,
+        phone,
+        state,
+        create_time,
+        update_time
+    </sql>
+
+    <!--where-->
+    <sql id="sql_where">
+        <where>
+            <if test="null != id and '' != id">and id = #{id}</if>
+            <if test="null != userNo and '' != userNo">and user_no = #{userNo}</if>
+            <if test="null != userName and '' != userName">and user_name = #{userName}</if>
+            <if test="null != password and '' != password">and password = #{password}</if>
+            <if test="null != avatar and '' != avatar">and avatar = #{avatar}</if>
+            <if test="null != role and '' != role">and role = #{role}</if>
+            <if test="null != phone and '' != phone">and phone = #{phone}</if>
+            <if test="null != state and '' != state">and state = #{state}</if>
+            <if test="null != createTime and '' != createTime">and create_time = #{createTime}</if>
+            <if test="null != updateTime and '' != updateTime">and update_time = #{updateTime}</if>
+        </where>
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_user where id = #{id}
+    </select>
+
+    <select id="selectOne" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_user
+        <include refid="sql_where"/>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_user
+        <include refid="sql_where"/>
+    </select>
+
+    <select id="selectPage" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_user
+        <include refid="sql_where"/>
+        limit #{page.startRow},#{page.pageSize}
+    </select>
+
+    <sql id="sql_save_columns">
+        insert into t_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != userNo">user_no,</if>
+            <if test="null != userName">user_name,</if>
+            <if test="null != password">password,</if>
+            <if test="null != avatar">avatar,</if>
+            <if test="null != role">role,</if>
+            <if test="null != phone">phone,</if>
+            <if test="null != state">state,</if>
+            <if test="null != createTime">create_time,</if>
+            <if test="null != updateTime">update_time,</if>
+        </trim>
+    </sql>
+
+    <sql id="sql_save_values">
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != userNo">#{userNo},</if>
+            <if test="null != userName">#{userName},</if>
+            <if test="null != password">#{password},</if>
+            <if test="null != avatar">#{avatar},</if>
+            <if test="null != role">#{role},</if>
+            <if test="null != phone">#{phone},</if>
+            <if test="null != state">#{state},</if>
+            <if test="null != createTime">#{createTime},</if>
+            <if test="null != updateTime">#{updateTime},</if>
+        </trim>
+    </sql>
+
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        <include refid="sql_save_columns"/>
+        <include refid="sql_save_values"/>
+    </insert>
+
+    <insert id="batchSave">
+        <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+            <include refid="sql_save_columns"/>
+            <include refid="sql_save_values"/>
+        </foreach>
+    </insert>
+
+    <sql id="sql_update">
+        update t_user set id = #{id}
+        <if test="null != userNo">, user_no = #{userNo}</if>
+        <if test="null != userName">, user_name = #{userName}</if>
+        <if test="null != password">, password = #{password}</if>
+        <if test="null != avatar">, avatar = #{avatar}</if>
+        <if test="null != role">, role = #{role}</if>
+        <if test="null != phone">, phone = #{phone}</if>
+        <if test="null != state">, state = #{state}</if>
+        <if test="null != createTime">, create_time = #{createTime}</if>
+        <if test="null != updateTime">, update_time = #{updateTime}</if>
+        where id = #{id}
+    </sql>
+
+    <update id="update">
+        <include refid="sql_update"/>
+    </update>
+
+    <update id="batchUpdate">
+        <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+            <include refid="sql_update"/>
+        </foreach>
+    </update>
+
+    <delete id="delById">
+        delete from t_user where id = #{id}
+    </delete>
+
+    <delete id="delArray">
+        delete from t_user where id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+
+    <delete id="delList">
+        delete from t_user where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+
 </mapper>

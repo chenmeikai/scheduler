@@ -5,14 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 
-
-/**      
- * @date:       
+/**
+ * @date:
  */
 public class Acl implements Serializable {
     private static final long serialVersionUID = 1L;
-    
-    
+
+
     //主键ID
     private Long ID;
     //资源编号
@@ -43,97 +42,126 @@ public class Acl implements Serializable {
     private Integer sort;
     //子资源集合
     private List<Acl> childAcls;
-    
-    public Long getID(){
+
+    public Long getID() {
         return ID;
     }
-    public void setID (Long ID){
+
+    public void setID(Long ID) {
         this.ID = ID;
     }
-    public Long getAclNo(){
+
+    public Long getAclNo() {
         return aclNo;
     }
-    public void setAclNo (Long aclNo){
+
+    public void setAclNo(Long aclNo) {
         this.aclNo = aclNo;
     }
-    public Date getCreateDate(){
+
+    public Date getCreateDate() {
         return createDate;
     }
-    public void setCreateDate (Date createDate){
+
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-    public Date getUpdateDate(){
+
+    public Date getUpdateDate() {
         return updateDate;
     }
-    public void setUpdateDate (Date updateDate){
+
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
-    public String getCreater(){
+
+    public String getCreater() {
         return creater;
     }
-    public void setCreater (String creater){
+
+    public void setCreater(String creater) {
         this.creater = creater;
     }
-    public String getUpdater(){
+
+    public String getUpdater() {
         return updater;
     }
-    public void setUpdater (String updater){
+
+    public void setUpdater(String updater) {
         this.updater = updater;
     }
-    public String getAclName(){
+
+    public String getAclName() {
         return aclName;
     }
-    public void setAclName (String aclName){
+
+    public void setAclName(String aclName) {
         this.aclName = aclName;
     }
-    public String getAclUrl(){
+
+    public String getAclUrl() {
         return aclUrl;
     }
-    public void setAclUrl (String aclUrl){
+
+    public void setAclUrl(String aclUrl) {
         this.aclUrl = aclUrl;
     }
-    public Integer getAclGrade(){
+
+    public Integer getAclGrade() {
         return aclGrade;
     }
-    public void setAclGrade (Integer aclGrade){
+
+    public void setAclGrade(Integer aclGrade) {
         this.aclGrade = aclGrade;
     }
-    public Integer getAclType(){
+
+    public Integer getAclType() {
         return aclType;
     }
-    public void setAclType (Integer aclType){
+
+    public void setAclType(Integer aclType) {
         this.aclType = aclType;
     }
-    public String getPermission(){
+
+    public String getPermission() {
         return permission;
     }
-    public void setPermission (String permission){
+
+    public void setPermission(String permission) {
         this.permission = permission;
     }
-    public String getIcon(){
+
+    public String getIcon() {
         return icon;
     }
-    public void setIcon (String icon){
+
+    public void setIcon(String icon) {
         this.icon = icon;
     }
-    public Long getParentNo(){
+
+    public Long getParentNo() {
         return parentNo;
     }
-    public void setParentNo (Long parentNo){
+
+    public void setParentNo(Long parentNo) {
         this.parentNo = parentNo;
     }
-    public Integer getSort(){
+
+    public Integer getSort() {
         return sort;
     }
-    public void setSort (Integer sort){
+
+    public void setSort(Integer sort) {
         this.sort = sort;
     }
-	public List<Acl> getChildAcls() {
-		return childAcls;
-	}
-	public void setChildAcls(List<Acl> childAcls) {
-		this.childAcls = childAcls;
-	}
-    
-    
+
+    public List<Acl> getChildAcls() {
+        return childAcls;
+    }
+
+    public void setChildAcls(List<Acl> childAcls) {
+        this.childAcls = childAcls;
+    }
+
+
 }

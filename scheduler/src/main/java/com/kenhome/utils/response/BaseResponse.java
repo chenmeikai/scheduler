@@ -12,17 +12,17 @@ public class BaseResponse<T> {
     public void setCode(Integer code) {
         this.code = code;
     }
-    
+
 
     public String getDesc() {
-		return desc;
-	}
+        return desc;
+    }
 
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
-	public T getData() {
+    public T getData() {
         return data;
     }
 

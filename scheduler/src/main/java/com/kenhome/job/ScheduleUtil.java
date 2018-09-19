@@ -74,7 +74,7 @@ public class ScheduleUtil {
         try {
             // Get Job class from ScheduleJob entity
             @SuppressWarnings("unchecked")
-			Class<? extends Job> jobClass = (Class<? extends Job>) Class.forName(scheduleJob.getClassName()).newInstance().getClass();
+            Class<? extends Job> jobClass = (Class<? extends Job>) Class.forName(scheduleJob.getClassName()).newInstance().getClass();
 
             // Create JobDetail entity
             JobDetail jobDetail = JobBuilder.newJob(jobClass)

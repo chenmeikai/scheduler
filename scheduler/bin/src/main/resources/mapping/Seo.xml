@@ -2,120 +2,134 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.huisheng.mapper.SeoMapper">
 
-  <!-- cache -->
-  <cache type="com.huisheng.config.cache.MybatisRedisCache">
-        <property name="eviction" value="LRU" />
-        <property name="flushInterval" value="6000000" />
-        <property name="size" value="1024" />
-        <property name="readOnly" value="false" />
-  </cache>
+    <!-- cache -->
+    <cache type="com.huisheng.config.cache.MybatisRedisCache">
+        <property name="eviction" value="LRU"/>
+        <property name="flushInterval" value="6000000"/>
+        <property name="size" value="1024"/>
+        <property name="readOnly" value="false"/>
+    </cache>
 
-  <!--BaseResultMap-->
-  <resultMap id="BaseResultMap" type="com.huisheng.model.Seo">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="key_no" jdbcType="BIGINT" property="keyNo" />
-        <result column="title" jdbcType="VARCHAR" property="title" />
-        <result column="description" jdbcType="VARCHAR" property="description" />
-        <result column="keyword" jdbcType="VARCHAR" property="keyword" />
-        <result column="type" jdbcType="INTEGER" property="type" />
-  </resultMap>
-  
-  <!--columns-->
-  <sql id="sql_columns">
-      id, 
-      key_no, 
-      title, 
-      description, 
-      keyword, 
-      type
-  </sql>
-  
-  <!--where-->
-  <sql id="sql_where">
-    <where>
-      <if test="null != id and '' != id">and id = #{id}</if>
-      <if test="null != keyNo and '' != keyNo">and key_no = #{keyNo}</if>
-      <if test="null != title and '' != title">and title = #{title}</if>
-      <if test="null != description and '' != description">and description = #{description}</if>
-      <if test="null != keyword and '' != keyword">and keyword = #{keyword}</if>
-      <if test="null != type and '' != type">and type = #{type}</if>
-	</where>
-  </sql>
-  
-  <select id="selectById" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_seo where id = #{id}
-  </select>
-  
-  <select id="selectOne" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_seo <include refid="sql_where" />
-  </select>
-  
-  <select id="selectList" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_seo <include refid="sql_where" />
-  </select>
-  
-  <select id="selectPage" resultMap="BaseResultMap">
-    select <include refid="sql_columns" /> from t_seo <include refid="sql_where" /> limit #{page.startRow},#{page.pageSize}
-  </select>
-  
-  <sql id="sql_save_columns">
-    insert into t_seo(
-      <if test="null != keyNo">key_no</if>
-      <if test="null != title">title</if>
-      <if test="null != description">description</if>
-      <if test="null != keyword">keyword</if>
-      <if test="null != type">type</if>
-	) values
-  </sql>
-  
-  <sql id="sql_save_values">
-    (
-     <if test="null != keyNo"> #{keyNo}</if>
-     <if test="null != title"> #{title}</if>
-     <if test="null != description"> #{description}</if>
-     <if test="null != keyword"> #{keyword}</if>
-     <if test="null != type"> #{type}</if>
-	)
-  </sql>
-  
-  <insert id="save" keyProperty="id" useGeneratedKeys="true">
-    <include refid="sql_save_columns" /><include refid="sql_save_values" />
-  </insert>
-  
-  <insert id="batchSave">
-    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
-	  <include refid="sql_save_columns" /><include refid="sql_save_values" />
-	</foreach>
-  </insert>
-  
-  <sql id="sql_update">
-    update t_seo set id = #{id}
-     <if test="null != keyNo">, key_no = #{keyNo}</if>
-     <if test="null != title">, title = #{title}</if>
-     <if test="null != description">, description = #{description}</if>
-     <if test="null != keyword">, keyword = #{keyword}</if>
-     <if test="null != type">, type = #{type}</if>
-	where id = #{id}
-  </sql>
-  
-  <update id="update">
-    <include refid="sql_update" />
-  </update>
-  
-  <update id="batchUpdate">
-    <foreach collection="list" index="index" item="item" open="" separator=";" close="">
-	  <include refid="sql_update" />
-	</foreach>
-  </update>
-  
-  <delete id="delArray">
-    delete from t_seo where id in
-	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
-  </delete>
-  
-  <delete id="delList">
-    delete from t_seo where id in
-	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
-  </delete>
-  
+    <!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.huisheng.model.Seo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="key_no" jdbcType="BIGINT" property="keyNo"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="keyword" jdbcType="VARCHAR" property="keyword"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+    </resultMap>
+
+    <!--columns-->
+    <sql id="sql_columns">
+        id,
+        key_no,
+        title,
+        description,
+        keyword,
+        type
+    </sql>
+
+    <!--where-->
+    <sql id="sql_where">
+        <where>
+            <if test="null != id and '' != id">and id = #{id}</if>
+            <if test="null != keyNo and '' != keyNo">and key_no = #{keyNo}</if>
+            <if test="null != title and '' != title">and title = #{title}</if>
+            <if test="null != description and '' != description">and description = #{description}</if>
+            <if test="null != keyword and '' != keyword">and keyword = #{keyword}</if>
+            <if test="null != type and '' != type">and type = #{type}</if>
+        </where>
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_seo where id = #{id}
+    </select>
+
+    <select id="selectOne" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_seo
+        <include refid="sql_where"/>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_seo
+        <include refid="sql_where"/>
+    </select>
+
+    <select id="selectPage" resultMap="BaseResultMap">
+        select
+        <include refid="sql_columns"/>
+        from t_seo
+        <include refid="sql_where"/>
+        limit #{page.startRow},#{page.pageSize}
+    </select>
+
+    <sql id="sql_save_columns">
+        insert into t_seo(
+        <if test="null != keyNo">key_no</if>
+        <if test="null != title">title</if>
+        <if test="null != description">description</if>
+        <if test="null != keyword">keyword</if>
+        <if test="null != type">type</if>
+        ) values
+    </sql>
+
+    <sql id="sql_save_values">
+        (
+        <if test="null != keyNo">#{keyNo}</if>
+        <if test="null != title">#{title}</if>
+        <if test="null != description">#{description}</if>
+        <if test="null != keyword">#{keyword}</if>
+        <if test="null != type">#{type}</if>
+        )
+    </sql>
+
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        <include refid="sql_save_columns"/>
+        <include refid="sql_save_values"/>
+    </insert>
+
+    <insert id="batchSave">
+        <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+            <include refid="sql_save_columns"/>
+            <include refid="sql_save_values"/>
+        </foreach>
+    </insert>
+
+    <sql id="sql_update">
+        update t_seo set id = #{id}
+        <if test="null != keyNo">, key_no = #{keyNo}</if>
+        <if test="null != title">, title = #{title}</if>
+        <if test="null != description">, description = #{description}</if>
+        <if test="null != keyword">, keyword = #{keyword}</if>
+        <if test="null != type">, type = #{type}</if>
+        where id = #{id}
+    </sql>
+
+    <update id="update">
+        <include refid="sql_update"/>
+    </update>
+
+    <update id="batchUpdate">
+        <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+            <include refid="sql_update"/>
+        </foreach>
+    </update>
+
+    <delete id="delArray">
+        delete from t_seo where id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+
+    <delete id="delList">
+        delete from t_seo where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+
 </mapper>

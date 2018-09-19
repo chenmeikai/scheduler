@@ -17,12 +17,12 @@ public class TestJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         // Do what you want here
-    	
-    	Date date =new Date();
-    	
-    	String time =DateUtils.format(date, "yyyy-MM-dd HH:mm:ss");
-    	
+
+        Date date = new Date();
+
+        String time = DateUtils.format(date, "yyyy-MM-dd HH:mm:ss");
+
         logger.info("我是天空之王...");
-        logger.info("当前时间："+time);
+        logger.info("当前时间：" + time);
     }
 }

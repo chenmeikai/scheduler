@@ -26,7 +26,7 @@ public class ApplicationUtils {
      * @return string
      */
     public static String currentDateTime() {
-    	 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-         return simpleDateFormat.format(new Date());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return simpleDateFormat.format(new Date());
     }
 }

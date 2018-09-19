@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <!--  <head>
     Required meta tags
     <meta charset="utf-8"></meta>
@@ -24,78 +24,78 @@
     <title>bootstrap table</title>
   </head> -->
 <div id="pageView">
-	<div class="container-fluid" style="margin-top: 10px;">
-		<div class="row">
-			<div class="col-sm-3">
-				<div class="ibox float-e-margins">
-					<div class="ibox-title">
-						<span class="label label-success pull-right">今天</span>
-						<h5>访客</h5>
-					</div>
-					<div  class="info-box info-right-line col-sm-6">
-						<h1 class="no-margins" th:text="${visitCountDay.ips}">0</h1>
-						<small>人数</small>
-					</div>
-					<div class="info-box col-sm-6">
-						<h1 class="no-margins" th:text="${visitCountDay.hits}">0</h1>
-						<small>点击</small>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="ibox float-e-margins">
-					<div class="ibox-title">
-						<span class="label label-info pull-right">昨天</span>
-						<h5>访客</h5>
-					</div>
-					<div class="info-box info-right-line col-sm-6">
-						<h1 class="no-margins" th:text="${visitCountLastDay.ips}">0</h1>
-						<small>人数</small>
-					</div>
-					<div class="info-box  col-sm-6">
-						<h1 class="no-margins" th:text="${visitCountLastDay.hits}">0</h1>
-						
-						<small>点击</small>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="ibox float-e-margins">
-					<div class="ibox-title">
-						<span class="label label-primary pull-right">当月</span>
-						<h5>访客</h5>
-					</div>
-					<div class="info-box info-right-line col-sm-6">
-						<h1 class="no-margins" th:text="${visitCountMonth.ips}">0</h1>
-						<small>人数</small>
-					</div>
-					<div class="info-box  col-sm-6">
-						<h1 class="no-margins" th:text="${visitCountMonth.hits}" >0</h1>
-						
-						<small>点击</small>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="ibox float-e-margins">
-					<div class="ibox-title">
-						<span class="label label-default pull-right">全年</span>
-						<h5>访客</h5>
-					</div>
-					<div class="info-box info-right-line col-sm-6">
-						<h1 class="no-margins" th:text="${visitCountYear.ips}">0</h1>
-						<small>人数</small>
-					</div>
-					<div class="info-box  col-sm-6">
-						<h1 class="no-margins" th:text="${visitCountYear.hits}">0</h1>
-						
-						<small>点击</small>
-					</div>
-				</div>
-			</div>
-		</div>
+    <div class="container-fluid" style="margin-top: 10px;">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-success pull-right">今天</span>
+                        <h5>访客</h5>
+                    </div>
+                    <div class="info-box info-right-line col-sm-6">
+                        <h1 class="no-margins" th:text="${visitCountDay.ips}">0</h1>
+                        <small>人数</small>
+                    </div>
+                    <div class="info-box col-sm-6">
+                        <h1 class="no-margins" th:text="${visitCountDay.hits}">0</h1>
+                        <small>点击</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-info pull-right">昨天</span>
+                        <h5>访客</h5>
+                    </div>
+                    <div class="info-box info-right-line col-sm-6">
+                        <h1 class="no-margins" th:text="${visitCountLastDay.ips}">0</h1>
+                        <small>人数</small>
+                    </div>
+                    <div class="info-box  col-sm-6">
+                        <h1 class="no-margins" th:text="${visitCountLastDay.hits}">0</h1>
 
-	</div>
+                        <small>点击</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-primary pull-right">当月</span>
+                        <h5>访客</h5>
+                    </div>
+                    <div class="info-box info-right-line col-sm-6">
+                        <h1 class="no-margins" th:text="${visitCountMonth.ips}">0</h1>
+                        <small>人数</small>
+                    </div>
+                    <div class="info-box  col-sm-6">
+                        <h1 class="no-margins" th:text="${visitCountMonth.hits}">0</h1>
+
+                        <small>点击</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-default pull-right">全年</span>
+                        <h5>访客</h5>
+                    </div>
+                    <div class="info-box info-right-line col-sm-6">
+                        <h1 class="no-margins" th:text="${visitCountYear.ips}">0</h1>
+                        <small>人数</small>
+                    </div>
+                    <div class="info-box  col-sm-6">
+                        <h1 class="no-margins" th:text="${visitCountYear.hits}">0</h1>
+
+                        <small>点击</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 </div>
 </html>

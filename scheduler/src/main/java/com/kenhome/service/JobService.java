@@ -11,6 +11,7 @@ import com.kenhome.job.ScheduleUtil;
 import com.kenhome.mapper.JobDao;
 import com.kenhome.model.ScheduleJob;
 import com.kenhome.utils.ServiceException;
+
 import java.util.List;
 
 
@@ -57,22 +58,22 @@ public class JobService {
         }
         return true;
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     public boolean enable(Long id) throws ServiceException {
-    	
-    	ScheduleJob scheduleJob = jobDao.select(id);
-    	
-    	if(scheduleJob.isEnable()) {
-    		return false;
-    	}
-    	
-    	scheduleJob.setEnable(true);
-    	jobDao.update(scheduleJob);
-    	
-    	ScheduleUtil.createScheduleJob(scheduler, scheduleJob);
-    	
-    	return true;
+
+        ScheduleJob scheduleJob = jobDao.select(id);
+
+        if (scheduleJob.isEnable()) {
+            return false;
+        }
+
+        scheduleJob.setEnable(true);
+        jobDao.update(scheduleJob);
+
+        ScheduleUtil.createScheduleJob(scheduler, scheduleJob);
+
+        return true;
     }
 
     @Transactional(rollbackFor = DataAccessException.class)
@@ -88,23 +89,23 @@ public class JobService {
 
         return true;
     }
-    
-    
+
+
     @Transactional(rollbackFor = Exception.class)
     public boolean delete(Long jobId) throws ServiceException {
-    	ScheduleJob scheduleJob = select(jobId);
-    	
-    	if(scheduleJob.isEnable()) {
-    		logger.warn("删除失败，请先移出任务");
-    		return false;
-    	}
-    	
-    	Integer num = jobDao.delete(jobId);
-    	if (num <= 0) {
-    		throw new ServiceException("Delete product:" + jobId + "failed");
-    	}
-    	
-    	return true;
+        ScheduleJob scheduleJob = select(jobId);
+
+        if (scheduleJob.isEnable()) {
+            logger.warn("删除失败，请先移出任务");
+            return false;
+        }
+
+        Integer num = jobDao.delete(jobId);
+        if (num <= 0) {
+            throw new ServiceException("Delete product:" + jobId + "failed");
+        }
+
+        return true;
     }
 
     public List<ScheduleJob> getAllJob() {
